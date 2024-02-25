@@ -3,7 +3,6 @@ const mysql = require("mysql2");
 const cTable = require("console.table");
 
 // Creates a connection to MySQL database
-
 const db = mysql.createConnection({
     host: "localhost",
     user: "root",
@@ -33,6 +32,9 @@ function startApp() {
                 "Add a role",
                 "Add an employee",
                 "Update an employee role",
+                "Delete a department",
+                "Delete a role",
+                "Delete an employee",
                 "Exit",
             ],
         },
@@ -59,6 +61,15 @@ function startApp() {
             case "Update an employee role":
                 updateEmployeeRole();
                 break;
+           case "Delete a department":
+                deleteDepartment();
+                break;
+            case "Delete a role":
+                deleteRole();
+                break;
+            case "Delete an employee":
+                deleteEmployee();
+                break;
             case "Exit":
                 console.log("Exiting the application.");
                 db.end();
@@ -66,7 +77,6 @@ function startApp() {
         }
     });
 }
-
 // Function to view all roles
 function viewRoles() {
     db.query("SELECT * FROM roles", (err, results) => {
@@ -118,12 +128,16 @@ function addEmployee() {
             message: "Enter the employee's manager ID (if applicable):",
         },
     ]).then((answer) => {
+        const { first_name, last_name, role_id, manager_id } = answer;
         db.query(
             "INSERT INTO employees (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)",
-            [answer.first_name, answer.last_name, answer.role_id, answer.manager_id],
+            [first_name, last_name, role_id, manager_id],
             (err, results) => {
-                if (err) throw err;
-                console.log("Employee added successfully.");
+                if (err) {
+                    console.log("Error adding employee:", err.message);
+                } else {
+                    console.log("Employee added successfully.");
+                }
                 startApp();
             }
         );
@@ -143,8 +157,11 @@ function addDepartment() {
             "INSERT INTO departments (name) VALUES (?)",
             [answer.name],
             (err, results) => {
-                if (err) throw err;
-                console.log("Department added successfully.");
+                if (err) {
+                    console.log("Error adding department:", err.message);
+                } else {
+                    console.log("Department added successfully.");
+                }
                 startApp();
             }
         );
@@ -187,8 +204,11 @@ function addRole() {
                 "INSERT INTO roles (title, salary, dept_id) VALUES (?, ?, ?)",
                 [answer.title, salary, answer.department],
                 (err, results) => {
-                    if (err) throw err;
-                    console.log("Role added successfully.");
+                    if (err) {
+                        console.log("Error adding role:", err.message);
+                    } else {
+                        console.log("Role added successfully.");
+                    }
                     startApp();
                 }
             );
@@ -232,6 +252,99 @@ function updateEmployeeRole() {
                     }
                 );
             });
+        });
+    });
+}
+
+// Function to delete a department
+function deleteDepartment() {
+    db.query("SELECT * FROM departments", (err, departments) => {
+        if (err) throw err;
+        inquirer.prompt([
+            {
+                type: "list",
+                name: "departmentId",
+                message: "Select the department to delete:",
+                choices: departments.map((dept) => ({
+                    name: dept.name,
+                    value: dept.dept_id,
+                })),
+            },
+        ]).then((answer) => {
+            db.query(
+                "DELETE FROM departments WHERE dept_id = ?",
+                [answer.departmentId],
+                (err, results) => {
+                    if (err) {
+                        console.log("Error deleting department:", err.message);
+                    } else {
+                        console.log("Department deleted successfully.");
+                    }
+                    startApp();
+                }
+            );
+        });
+    });
+}
+
+// Function to delete a role
+function deleteRole() {
+    db.query("SELECT * FROM roles", (err, roles) => {
+        if (err) throw err;
+        inquirer.prompt([
+            {
+                type: "list",
+                name: "roleId",
+                message: "Select the role to delete:",
+                choices: roles.map((role) => ({
+                    name: role.title,
+                    value: role.role_id,
+                })),
+            },
+        ]).then((answer) => {
+            db.query(
+                "DELETE FROM roles WHERE role_id = ?",
+                [answer.roleId],
+                (err, results) => {
+                    if (err) {
+                        console.log("Error deleting role:", err.message);
+                    } else {
+                        console.log("Role deleted successfully.");
+                    }
+                    startApp();
+                }
+            );
+        });
+    });
+}
+
+// Function to delete an employee
+function deleteEmployee() {
+    db.query("SELECT * FROM employees", (err, employees) => {
+        if (err) throw err;
+        inquirer.prompt([
+            {
+                type: "list",
+                name: "employeeId",
+                message: "Select the employee to delete:",
+                choices: employees.map((employee) => ({
+                    name: `${employee.first_name} ${employee.last_name}`,
+                    value: employee.employee_id,
+                })),
+            },
+        ]).then((answer) => {
+            db.query(
+                "DELETE FROM employees WHERE employee_id = ?",
+                [answer.employeeId],
+                (err, results) => {
+                    if (err) {
+                        console.log("Error deleting employee:", err.message);
+                    } else {
+                        console.log("Employee deleted successfully.");
+                    }
+                    startApp();
+                }
+            );
         });
     });
 }
