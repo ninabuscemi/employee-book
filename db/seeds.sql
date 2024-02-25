@@ -7,7 +7,7 @@ INSERT INTO departments (name) VALUES
 
 -- Inserts data into the roles table
 INSERT INTO roles (title, salary, dept_id) VALUES
-('Software Engineer', 80000, 1),  -- Engineering
+('Software Engineer', 80000, 1),   -- Engineering
 ('Sales Manager', 90000, 2),       -- Sales
 ('Marketing Coordinator', 60000, 3),-- Marketing
 ('HR Specialist', 65000, 4);       -- Human Resources
