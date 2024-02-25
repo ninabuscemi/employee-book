@@ -69,3 +69,12 @@ function startApp() {
         }
     });
 }
+
+// Function to view all roles
+function viewRoles() {
+    db.query("SELECT * FROM roles", (err, results) => {
+        if (err) throw err;
+        console.table(results);
+        startApp();
+    });
+}
