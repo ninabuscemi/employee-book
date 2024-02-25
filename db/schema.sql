@@ -1,4 +1,36 @@
-DROP DATABASE IF EXISTS employee_db;
-CREATE DATABASE employee_db;
+-- Drop the database if it already exists and create a new database named employee_tracker
+DROP DATABASE IF EXISTS employee_tracker;
+CREATE DATABASE employee_tracker;
+USE employee_tracker;
 
-USE employee;
+-- Drop existing tables if they exist to start fresh
+DROP TABLE IF EXISTS departments;
+DROP TABLE IF EXISTS roles;
+DROP TABLE IF EXISTS employees;
+
+-- Create a table to store departments with a unique department ID and name
+CREATE TABLE departments (
+    dept_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(30) UNIQUE -- Unique constraint to ensure department names are unique
+);
+
+-- Create a table to store roles with a unique role ID, title, salary, and department ID
+CREATE TABLE roles (
+    role_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(30) UNIQUE, -- Unique constraint to ensure role titles are unique
+    salary DECIMAL,
+    dept_id INT,
+    FOREIGN KEY (dept_id) REFERENCES departments(dept_id)
+);
+
+-- Create a table to store employees with a unique employee ID, first name, last name, role ID, and manager ID
+CREATE TABLE employees (
+    employee_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    first_name VARCHAR(30),
+    last_name VARCHAR(30),
+    role_id INT,
+    manager_id INT,
+    UNIQUE (first_name, last_name), -- Unique constraint to ensure each employee's first and last name combination is unique
+    FOREIGN KEY (role_id) REFERENCES roles(role_id),
+    FOREIGN KEY (manager_id) REFERENCES employees(employee_id) ON DELETE SET NULL
+);
