@@ -78,3 +78,44 @@ function viewRoles() {
         startApp();
     });
 }
+
+// Function to view all departments
+function viewDepartments() {
+    db.query("SELECT * FROM roles", (err, results) =>{
+        if (err) throw err;
+        console.table(results);
+        startApp();
+    });
+}
+
+// Function to view all employees
+function viewEmployees() {
+  db.query("SELECT * FROM employees", (err, results) => {
+    if (err) throw err;
+    console.table(results);
+    startApp();
+  });
+}
+
+// Function to add department
+function addDepartment() {
+    inquirer
+        .prompt([
+            {
+                type: "input",
+                name: "name",
+                message: "Enter the name of the department",
+            },
+        ])
+        .then((answer) => {
+            db.query(
+                "INSERT INTO departments (name) VALUES (?)",
+                [answer.name],
+                (err, results) => {
+                    if (err) throw err;
+                    console.log("Department added successfully.");
+                    startApp();
+                }
+            );
+        });
+}
