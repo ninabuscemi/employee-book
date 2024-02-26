@@ -32,9 +32,6 @@ function startApp() {
                 "Add a role",
                 "Add an employee",
                 "Update an employee role",
-                "Delete a department",
-                "Delete a role",
-                "Delete an employee",
                 "Exit",
             ],
         },
@@ -61,15 +58,6 @@ function startApp() {
             case "Update an employee role":
                 updateEmployeeRole();
                 break;
-           case "Delete a department":
-                deleteDepartment();
-                break;
-            case "Delete a role":
-                deleteRole();
-                break;
-            case "Delete an employee":
-                deleteEmployee();
-                break;
             case "Exit":
                 console.log("Exiting the application.");
                 db.end();
@@ -77,6 +65,7 @@ function startApp() {
         }
     });
 }
+
 // Function to view all roles
 function viewRoles() {
     db.query("SELECT * FROM roles", (err, results) => {
@@ -106,41 +95,44 @@ function viewEmployees() {
 
 // Function to add an employee
 function addEmployee() {
-    inquirer.prompt([
-        {
-            type: "input",
-            name: "first_name",
-            message: "Enter the employee's first name:",
-        },
-        {
-            type: "input",
-            name: "last_name",
-            message: "Enter the employee's last name:",
-        },
-        {
-            type: "input",
-            name: "role_id",
-            message: "Enter the employee's role ID:",
-        },
-        {
-            type: "input",
-            name: "manager_id",
-            message: "Enter the employee's manager ID (if applicable):",
-        },
-    ]).then((answer) => {
-        const { first_name, last_name, role_id, manager_id } = answer;
-        db.query(
-            "INSERT INTO employees (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)",
-            [first_name, last_name, role_id, manager_id],
-            (err, results) => {
-                if (err) {
-                    console.log("Error adding employee:", err.message);
-                } else {
-                    console.log("Employee added successfully.");
+    db.query("SELECT * FROM roles", (err, roles) => {
+        if (err) throw err;
+        inquirer.prompt([
+            {
+                name: "first_name",
+                type: "input",
+                message: "What is the employee's first name?",
+            },
+            {
+                name: "last_name",
+                type: "input",
+                message: "What is the employee's last name?",
+            },
+            {
+                name: "role_id",
+                type: "list",
+                message: "What is the employee's role id?",
+                choices: roles.map((role) => ({
+                    name: role.title,
+                    value: role.role_id,
+                })),
+            },
+        ])
+        .then((answer) => {
+            const { first_name, last_name, role_id } = answer;
+            db.query(
+                "INSERT INTO employees (first_name, last_name, role_id) VALUES (?, ?, ?)",
+                [first_name, last_name, role_id],
+                (err, results) => {
+                    if (err) {
+                        console.log("Error adding employee:", err.message);
+                    } else {
+                        console.log("Employee added successfully.");
+                    }
+                    startApp();
                 }
-                startApp();
-            }
-        );
+            );
+        });
     });
 }
 
@@ -252,99 +244,6 @@ function updateEmployeeRole() {
                     }
                 );
             });
-        });
-    });
-}
-
-// Function to delete a department
-function deleteDepartment() {
-    db.query("SELECT * FROM departments", (err, departments) => {
-        if (err) throw err;
-        inquirer.prompt([
-            {
-                type: "list",
-                name: "departmentId",
-                message: "Select the department to delete:",
-                choices: departments.map((dept) => ({
-                    name: dept.name,
-                    value: dept.dept_id,
-                })),
-            },
-        ]).then((answer) => {
-            db.query(
-                "DELETE FROM departments WHERE dept_id = ?",
-                [answer.departmentId],
-                (err, results) => {
-                    if (err) {
-                        console.log("Error deleting department:", err.message);
-                    } else {
-                        console.log("Department deleted successfully.");
-                    }
-                    startApp();
-                }
-            );
-        });
-    });
-}
-
-// Function to delete a role
-function deleteRole() {
-    db.query("SELECT * FROM roles", (err, roles) => {
-        if (err) throw err;
-        inquirer.prompt([
-            {
-                type: "list",
-                name: "roleId",
-                message: "Select the role to delete:",
-                choices: roles.map((role) => ({
-                    name: role.title,
-                    value: role.role_id,
-                })),
-            },
-        ]).then((answer) => {
-            db.query(
-                "DELETE FROM roles WHERE role_id = ?",
-                [answer.roleId],
-                (err, results) => {
-                    if (err) {
-                        console.log("Error deleting role:", err.message);
-                    } else {
-                        console.log("Role deleted successfully.");
-                    }
-                    startApp();
-                }
-            );
-        });
-    });
-}
-
-// Function to delete an employee
-function deleteEmployee() {
-    db.query("SELECT * FROM employees", (err, employees) => {
-        if (err) throw err;
-        inquirer.prompt([
-            {
-                type: "list",
-                name: "employeeId",
-                message: "Select the employee to delete:",
-                choices: employees.map((employee) => ({
-                    name: `${employee.first_name} ${employee.last_name}`,
-                    value: employee.employee_id,
-                })),
-            },
-        ]).then((answer) => {
-            db.query(
-                "DELETE FROM employees WHERE employee_id = ?",
-                [answer.employeeId],
-                (err, results) => {
-                    if (err) {
-                        console.log("Error deleting employee:", err.message);
-                    } else {
-                        console.log("Employee deleted successfully.");
-                    }
-                    startApp();
-                }
-            );
         });
     });
 }

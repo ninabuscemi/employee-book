@@ -8,28 +8,26 @@ DROP TABLE IF EXISTS departments;
 DROP TABLE IF EXISTS roles;
 DROP TABLE IF EXISTS employees;
 
--- Table to store departments with a unique department ID and name
+-- Create departments table
 CREATE TABLE departments (
-    dept_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(30) UNIQUE -- Unique constraint to ensure department names are unique
+    dept_id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(30) NOT NULL
 );
 
--- Table to store roles with a unique role ID, title, salary, and department ID
+-- Create roles table
 CREATE TABLE roles (
     role_id INT AUTO_INCREMENT PRIMARY KEY,
-    title VARCHAR(30) UNIQUE, -- Unique constraint to ensure role titles are unique
-    salary DECIMAL,
+    title VARCHAR(30) NOT NULL,
+    salary DECIMAL(10, 2) NOT NULL,
     dept_id INT,
     FOREIGN KEY (dept_id) REFERENCES departments(dept_id)
 );
 
--- Table to store employees with a unique employee ID, first name, last name, role ID, and manager ID
+-- Create employees table
 CREATE TABLE employees (
-    employee_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    first_name VARCHAR(30),
-    last_name VARCHAR(30),
+    employee_id INT AUTO_INCREMENT PRIMARY KEY,
+    first_name VARCHAR(30) NOT NULL,
+    last_name VARCHAR(30) NOT NULL,
     role_id INT,
-    manager_id INT,
-    FOREIGN KEY (role_id) REFERENCES roles(role_id),
-    FOREIGN KEY (manager_id) REFERENCES employees(employee_id) ON DELETE SET NULL
+    FOREIGN KEY (role_id) REFERENCES roles(role_id)
 );
