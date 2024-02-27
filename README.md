@@ -38,7 +38,7 @@ THEN I am prompted to select an employee to update and their new role and this i
 
     npm install console.table --save
 
-## Installation
+## Demo
 
 ![""]()
 

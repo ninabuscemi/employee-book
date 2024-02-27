@@ -2,20 +2,75 @@ const inquirer = require('inquirer');
 const mysql = require("mysql2");
 const cTable = require("console.table");
 
-// Creates a connection to MySQL database
+// Create a connection to MySQL without specifying a database
 const db = mysql.createConnection({
     host: "localhost",
     user: "root",
-    password: "Tralala101*",
-    database: "employee_tracker",
+    password: "Tralala101*"
 });
 
-// Connects to the database
+// Connect to MySQL
 db.connect((err) => {
     if (err) throw err;
-    console.log("Connected to the database.");
-    startApp();
+    console.log("Connected to MySQL.");
+
+    // Create the employee_tracker database
+    db.query("CREATE DATABASE IF NOT EXISTS employee_tracker", (err, result) => {
+        if (err) throw err;
+        console.log("employee_tracker database created successfully.");
+
+        // Now, specify the database in the connection
+        db.changeUser({ database: "employee_tracker" }, (err) => {
+            if (err) throw err;
+            console.log("Connected to the employee_tracker database.");
+
+            // Call the function to create tables here
+            createTables();
+        });
+    });
 });
+
+// Function to create tables
+function createTables() {
+    // Create departments table
+    db.query(`CREATE TABLE IF NOT EXISTS departments (
+        dept_id INT AUTO_INCREMENT PRIMARY KEY,
+        name VARCHAR(30) UNIQUE
+    )`, (err, result) => {
+        if (err) throw err;
+        console.log("Departments table created successfully.");
+    });
+
+    // Create roles table
+    db.query(`CREATE TABLE IF NOT EXISTS roles (
+        role_id INT AUTO_INCREMENT PRIMARY KEY,
+        title VARCHAR(30) UNIQUE,
+        salary DECIMAL(10, 2),
+        dept_id INT,
+        FOREIGN KEY (dept_id) REFERENCES departments(dept_id)
+    )`, (err, result) => {
+        if (err) throw err;
+        console.log("Roles table created successfully.");
+    });
+
+    // Create employees table
+    db.query(`CREATE TABLE IF NOT EXISTS employees (
+        employee_id INT AUTO_INCREMENT PRIMARY KEY,
+        first_name VARCHAR(30),
+        last_name VARCHAR(30),
+        role_id INT,
+        manager_id INT,
+        UNIQUE (first_name, last_name),
+        FOREIGN KEY (role_id) REFERENCES roles(role_id),
+        FOREIGN KEY (manager_id) REFERENCES employees(employee_id) ON DELETE SET NULL
+    )`, (err, result) => {
+        if (err) throw err;
+        console.log("Employees table created successfully.");
+
+        // After creating all tables, call the function to start the application
+        startApp();
+    });
+}
 
 // Function to start the application
 function startApp() {
@@ -133,8 +188,7 @@ function addEmployee() {
         ])
         .then((answer) => {
             const { first_name, last_name, role_id } = answer;
-            db.query(
-                "INSERT INTO employees (first_name, last_name, role_id) VALUES (?, ?, ?)",
+            db.query("INSERT INTO employees (first_name, last_name, role_id) VALUES (?, ?, ?)",
                 [first_name, last_name, role_id],
                 (err, results) => {
                     if (err) {
@@ -188,7 +242,7 @@ function addRole() {
                 name: "salary",
                 message: "Enter the salary for this role:",
                 validate: function (value) {
-                    // Validate if the input is a valid number
+
                     const isValid = /^\d+(\.\d+)?$/.test(value);
                     return isValid || 'Please enter a valid number';
                 }
@@ -203,7 +257,7 @@ function addRole() {
                 })),
             },
         ]).then((answer) => {
-            // Convert salary to a number before inserting into the database
+            // Converts salary to a number before inserting into the database
             const salary = parseFloat(answer.salary);
             db.query(
                 "INSERT INTO roles (title, salary, dept_id) VALUES (?, ?, ?)",
