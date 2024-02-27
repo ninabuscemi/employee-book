@@ -2,7 +2,7 @@
 
 ## Description
 
-This is a professional README file generator that provides a README file for the user's project. The generator inities a file that automatically inputs the description, table of contents, installation, usage, contribution, tests, license costs, and questions that is provided in the prompts by the user.
+This is a employee tracker that provides companies a way to view and manage departments, roles, and employees so that they can organize and plan schedules better.
 
 ## Acceptance Criteria
 
