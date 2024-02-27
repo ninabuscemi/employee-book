@@ -60,9 +60,22 @@ function startApp() {
                 break;
             case "Exit":
                 console.log("Exiting the application.");
-                db.end();
+                // Drop the database before exiting
+                dropDatabase();
                 break;
         }
+    });
+}
+
+// Function to drop the database
+function dropDatabase() {
+    db.query("DROP DATABASE IF EXISTS employee_tracker", (err, result) => {
+        if (err) {
+            console.log("Error dropping database:", err.message);
+        } else {
+            console.log("Database deleted successfully.");
+        }
+        db.end(); // Close the database connection
     });
 }
 
