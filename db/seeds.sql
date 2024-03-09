@@ -1,10 +1,10 @@
-INSERT INTO departments (name) VALUES
+INSERT INTO departments (dept_name) VALUES
 ('Sales'),
 ('Engineering'),
 ('Finance'),
 ('Human Resources');
 
-INSERT INTO roles (title, salary, department_id) VALUES
+INSERT INTO roles (title, salary, dept_id) VALUES
 ('Sales Lead', 100000, 1),
 ('Software Engineer', 120000, 2),
 ('Account Manager', 150000, 3),

@@ -1,13 +1,15 @@
 const inquirer = require('inquirer');
 const mysql = require("mysql2");
-const cTable = require("console.table");
 
 // Create a connection to MySQL without specifying a database
 const db = mysql.createConnection({
     host: "localhost",
     user: "root",
     password: "Tralala101*"
-});
+
+        },
+    console.log(`Welcome! You are connect to the employee_tracker database.`)
+);
 
 // Connect to MySQL
 db.connect((err) => {
