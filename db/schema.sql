@@ -16,8 +16,8 @@ CREATE TABLE departments (
 -- Create a table to store roles with a unique role ID, title, salary, and department ID
 CREATE TABLE roles (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    title VARCHAR(100),
-    salary INT,
+    title VARCHAR(30) NOT NULL,
+    salary DECIMAL,
     dept_id INT,
     FOREIGN KEY (dept_id) REFERENCES departments(id) ON DELETE SET NULL
 );
@@ -27,8 +27,8 @@ CREATE TABLE employees (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     first_name VARCHAR(30),
     last_name VARCHAR(30),
-    employee_role int,
+    role_id int,
     manager_id INT,
-    FOREIGN KEY (employee_role) REFERENCES roles(id) ON DELETE SET NULL,
+    FOREIGN KEY (role_id) REFERENCES roles(id) ON DELETE SET NULL,
     FOREIGN KEY (manager_id) REFERENCES employees(id) ON DELETE SET NULL
 );
