@@ -1,5 +1,7 @@
 # Employee Book
 
+![License Badge](https://badgen.net/static/license/MIT/blue)
+
 ## Description
 
 This is a employee tracker that provides companies a way to view and manage departments, roles, and employees so that they can organize and plan schedules better.
