@@ -65,7 +65,7 @@ function addEmployee() {
             {
                 name: "role_id",
                 type: "list",
-                message: "What is the employee's role id?",
+                message: "What is the employee's role?",
                 choices: roles.map((role) => ({
                     name: role.title,
                     value: role.role_id,
@@ -244,8 +244,6 @@ function startApp() {
                 break;
             case "Exit":
                 console.log("Exiting the application.");
-                // Drop the database before exiting
-                dropDatabase();
                 break;
         }
     });
