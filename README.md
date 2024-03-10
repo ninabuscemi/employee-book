@@ -8,7 +8,7 @@ This is a employee tracker that provides companies a way to view and manage depa
 
 ## Installation
 - Repo: [GitHub Repo](https://github.com/ninabuscemi/employee-book)
-- Video walkthrough: [GoogleDrive link](./assets/SQL_demo_video.mp4)
+- Video walkthrough: [GoogleDrive link](https://drive.google.com/file/d/1HLKbLe5-16dSm9i98i-2J07cMqc4yWbg/view?usp=sharing)(./assets/SQL_demo_video.mp4)
 
 ## Usage
 
