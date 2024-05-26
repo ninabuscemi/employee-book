@@ -1,5 +1,8 @@
 # Employee Book ![License Badge](https://badgen.net/static/license/MIT/blue)
 
+![MySQL](https://img.shields.io/badge/MySQL-005C84?style=for-the-badge&logo=mysql&logoColor=white)
+![Javascript](https://img.shields.io/badge/JavaScript-323330?style=for-the-badge&logo=javascript&logoColor=F7DF1E)
+
 ## Description
 
 This is a employee tracker that provides companies a way to view and manage departments, roles, and employees so that they can organize and plan schedules better.
@@ -27,8 +30,6 @@ Click [here](https://drive.google.com/file/d/1HLKbLe5-16dSm9i98i-2J07cMqc4yWbg/v
 
 ## Usage
 
-To run: 
-
  1. Run from the command line: 
 
     ```
@@ -36,15 +37,28 @@ To run:
     ```
 
 2. Open mysql and type in your username/password.
-3. Type 'SOURCE db/schema.sql', then 'SOURCE db/seeds.sql' to create and seed the database.
-4. Run to begin application interface:
+3. Use these commands to create and seed the database:
+
+   ```
+   SOURCE db/schema.sql
+   ```
+ 
+   ```
+   SOURCE db/seeds.sql
+   ```
+
+6. Run to begin application interface:
 
    ```
    node index
    ```
    
-5. Arrow up and down to see all menu options and make selections. Press the Enter key to select an option.
-6. Select EXIT to quit the program.
+7. Arrow up and down to see all menu options and make selections. Press the Enter key to select an option.
+8. Select EXIT to quit the program.
+
+## Features
+
+
 
 ## License
 
