@@ -18,9 +18,6 @@ This is a employee tracker that provides companies a way to view and manage depa
 Click [here](https://drive.google.com/file/d/1HLKbLe5-16dSm9i98i-2J07cMqc4yWbg/view?usp=sharing) to watch a walkthrough demonstration of the tracker.
 
 ## Installation
-- Repo: [GitHub Repo](https://github.com/ninabuscemi/employee-book)
-
-## Installation
 
 [Download](https://github.com/ninabuscemi/employee-book) or clone the repository:
 
